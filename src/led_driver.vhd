@@ -13,7 +13,7 @@ entity led_driver is
 end led_driver;
 
 architecture Behavioral of led_driver is
-TYPE State_type IS (Init,Enable,OnTime,OffTime);  -- Define the states
+TYPE State_type IS (Init,Enable,OnTime,OffTime,Disabled);  -- Define the states
 	SIGNAL State : State_Type;    
 							      
 	signal      LED_Signal   : std_logic;							
@@ -39,11 +39,18 @@ begin
 		       State <= OnTime;
 				 
 		  WHEN OnTime =>
-		      LED_Signal <= not LED_Signal;
-		       State <= OffTime;
-				 
+		   if(InputData = x"1") then -- if data from slave is equal to 1 turn on led
+		        LED_Signal <= '1';
+		       State <= OnTime; 
+			 else
+			    State <= Disabled;
+			end if;
+			
 		  WHEN OffTime =>
 		     LED_Signal <= LED_Signal;
+			  
+		  WHEN Disabled =>
+		         LED_Signal <= '0';  
 			  
 		  WHEN others =>
 		        State <= Init;

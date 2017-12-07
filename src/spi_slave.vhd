@@ -83,11 +83,13 @@ begin
 				  end if;
 			  	
          elsif(SCLK_old = '1' and SCLK_latched = '0') then  --faling edge of spic clock
+			  if(index = 31) then -- if index past readwrite bit
 			    if(ReadWriteBit = '0') then --if read operation
                 TxData <= TxData(38 downto 0) & '1'; -- output 1111 1111 to master
 				else
 				    TxData <= TxData(38 downto 0) & '0'; -- output 0000 0000 to master
                end if;
+				end if;
         end if;
       end if;
 	  end if;

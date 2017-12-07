@@ -16,20 +16,23 @@ architecture Behavioral of led_driver is
 TYPE State_type IS (Init,Enable,OnTime,OffTime,Disabled);  -- Define the states
 	SIGNAL State : State_Type;    
 							      
-	signal      LED_Signal   : std_logic;							
+	signal      LED_Signal   : std_logic;
+   signal      CopyInput : std_logic_vector(31 downto 0);	
     
 
 begin
 
 
-  process(CLK_in, RESET_in)
+  process(CLK_in, RESET_in,InputData)
 
  begin
     if (RESET_in = '1') then
         State <= Init;
-		
+		  CopyInput <= InputData;
 
     elsif( rising_edge(CLK_in) ) then
+	 
+	  CopyInput <= InputData;
 	 
       CASE State IS
         WHEN Init => 
@@ -38,8 +41,8 @@ begin
 		  WHEN Enable =>
 		       State <= OnTime;
 				 
-		  WHEN OnTime =>
-		   if(InputData = x"1") then -- if data from slave is equal to 1 turn on led
+		    if(CopyInput <= "1") then -- if data from slave is equal to 1 turn on led
+			
 		        LED_Signal <= '1';
 		       State <= OnTime; 
 			 else

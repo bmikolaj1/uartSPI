@@ -8,6 +8,7 @@ entity led_driver is
     RESET_in    : in  std_logic;
     CLK_in      : in  std_logic;
 	 InputData   : in std_logic_vector(31 downto 0);
+	 OutData     : out std_logic_vector(31 downto 0);
 	 LedOut      : out  std_logic 
     );
 end led_driver;
@@ -17,7 +18,8 @@ TYPE State_type IS (Init,Enable,OnTime,OffTime,Disabled);  -- Define the states
 	SIGNAL State : State_Type;    
 							      
 	signal      LED_Signal   : std_logic;
-   signal      CopyInput : std_logic_vector(31 downto 0);	
+   signal      CopyInput : std_logic_vector(31 downto 0);
+   signal      OutDtx : std_logic_vector(31 downto 0);	
     
 
 begin
@@ -29,10 +31,12 @@ begin
     if (RESET_in = '1') then
         State <= Init;
 		  CopyInput <= InputData;
-
+		  OutDtx <= (others => '0');  
+		  
     elsif( rising_edge(CLK_in) ) then
 	 
 	  CopyInput <= InputData;
+	  OutDtx <= (31 =>'1', others =>'0'); --assing 1 to output from led
 	 
       CASE State IS
         WHEN Init => 
@@ -66,6 +70,6 @@ begin
    end process;
 
  LedOut <= LED_Signal;
-
+ OutData <= OutDtx;
 
 end Behavioral;

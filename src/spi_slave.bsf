@@ -20,7 +20,7 @@ refer to the applicable agreement for further details.
 */
 (header "symbol" (version "1.1"))
 (symbol
-	(rect 16 16 224 160)
+	(rect 16 16 232 160)
 	(text "spi_slave" (rect 5 0 42 12)(font "Arial" ))
 	(text "inst" (rect 8 128 20 140)(font "Arial" ))
 	(port
@@ -59,20 +59,27 @@ refer to the applicable agreement for further details.
 		(line (pt 0 96)(pt 16 96)(line_width 1))
 	)
 	(port
-		(pt 208 32)
-		(output)
-		(text "SPI_MISO" (rect 0 0 43 12)(font "Arial" ))
-		(text "SPI_MISO" (rect 144 27 187 39)(font "Arial" ))
-		(line (pt 208 32)(pt 192 32)(line_width 1))
+		(pt 0 112)
+		(input)
+		(text "DataTxd[31..0]" (rect 0 0 57 12)(font "Arial" ))
+		(text "DataTxd[31..0]" (rect 21 107 78 119)(font "Arial" ))
+		(line (pt 0 112)(pt 16 112)(line_width 3))
 	)
 	(port
-		(pt 208 48)
+		(pt 216 32)
+		(output)
+		(text "SPI_MISO" (rect 0 0 43 12)(font "Arial" ))
+		(text "SPI_MISO" (rect 152 27 195 39)(font "Arial" ))
+		(line (pt 216 32)(pt 200 32)(line_width 1))
+	)
+	(port
+		(pt 216 48)
 		(output)
 		(text "DataRxd[31..0]" (rect 0 0 60 12)(font "Arial" ))
-		(text "DataRxd[31..0]" (rect 127 43 187 55)(font "Arial" ))
-		(line (pt 208 48)(pt 192 48)(line_width 3))
+		(text "DataRxd[31..0]" (rect 135 43 195 55)(font "Arial" ))
+		(line (pt 216 48)(pt 200 48)(line_width 3))
 	)
 	(drawing
-		(rectangle (rect 16 16 192 128)(line_width 1))
+		(rectangle (rect 16 16 200 128)(line_width 1))
 	)
 )

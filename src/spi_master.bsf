@@ -52,6 +52,13 @@ refer to the applicable agreement for further details.
 		(line (pt 0 80)(pt 16 80)(line_width 3))
 	)
 	(port
+		(pt 224 32)
+		(output)
+		(text "SCLK" (rect 0 0 25 12)(font "Arial" ))
+		(text "SCLK" (rect 178 27 203 39)(font "Arial" ))
+		(line (pt 224 32)(pt 208 32)(line_width 1))
+	)
+	(port
 		(pt 224 48)
 		(output)
 		(text "SS" (rect 0 0 11 12)(font "Arial" ))
@@ -68,16 +75,9 @@ refer to the applicable agreement for further details.
 	(port
 		(pt 224 80)
 		(output)
-		(text "DataRxd[39..0]" (rect 0 0 61 12)(font "Arial" ))
-		(text "DataRxd[39..0]" (rect 142 75 203 87)(font "Arial" ))
+		(text "DataRxd[31..0]" (rect 0 0 60 12)(font "Arial" ))
+		(text "DataRxd[31..0]" (rect 143 75 203 87)(font "Arial" ))
 		(line (pt 224 80)(pt 208 80)(line_width 3))
-	)
-	(port
-		(pt 224 32)
-		(bidir)
-		(text "SCLK" (rect 0 0 25 12)(font "Arial" ))
-		(text "SCLK" (rect 178 27 203 39)(font "Arial" ))
-		(line (pt 224 32)(pt 208 32)(line_width 1))
 	)
 	(drawing
 		(rectangle (rect 16 16 208 96)(line_width 1))

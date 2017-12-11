@@ -21,6 +21,7 @@ end spi_master;
 architecture Behavioral of spi_master is
     type state_type is (idle, txBit, CheckFinished);
     signal state : state_type;
+	 signal DataOut : std_logic_vector(3 downto 0);
 
 begin
   process(clk, reset)
@@ -29,6 +30,7 @@ begin
 
     variable index : integer := 0;
     variable dataLen : integer := 39;   --length of the data word to be txd
+	 
   begin
     if reset = '1' then
       DataRxd <= (others => '0');  
@@ -37,6 +39,7 @@ begin
       MOSI <= 'Z';
       dataLen := 39;
       index := 0;
+		
     else
       if(clk'event and clk = '1') then
         case state is
@@ -52,7 +55,9 @@ begin
             state <= checkFinished;
             
           when checkFinished =>
+			   
             DataRxd(index) <= MISO;
+				
             if(index = dataLen) then
               state <= idle;
               SCLK <= '1';

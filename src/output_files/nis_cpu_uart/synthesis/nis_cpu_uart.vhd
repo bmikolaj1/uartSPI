@@ -8,8 +8,12 @@ use IEEE.numeric_std.all;
 
 entity nis_cpu_uart is
 	port (
-		clk_clk       : in std_logic := '0'; --   clk.clk
-		reset_reset_n : in std_logic := '0'  -- reset.reset_n
+		clk_clk       : in  std_logic := '0'; --     clk.clk
+		reset_reset_n : in  std_logic := '0'; --   reset.reset_n
+		spi_out_MISO  : in  std_logic := '0'; -- spi_out.MISO
+		spi_out_MOSI  : out std_logic;        --        .MOSI
+		spi_out_SCLK  : out std_logic;        --        .SCLK
+		spi_out_SS_n  : out std_logic         --        .SS_n
 	);
 end entity nis_cpu_uart;
 
@@ -65,7 +69,7 @@ architecture rtl of nis_cpu_uart is
 	component nis_cpu_uart_onchip_mem is
 		port (
 			clk        : in  std_logic                     := 'X';             -- clk
-			address    : in  std_logic_vector(12 downto 0) := (others => 'X'); -- address
+			address    : in  std_logic_vector(11 downto 0) := (others => 'X'); -- address
 			clken      : in  std_logic                     := 'X';             -- clken
 			chipselect : in  std_logic                     := 'X';             -- chipselect
 			write      : in  std_logic                     := 'X';             -- write
@@ -77,6 +81,24 @@ architecture rtl of nis_cpu_uart is
 			freeze     : in  std_logic                     := 'X'              -- freeze
 		);
 	end component nis_cpu_uart_onchip_mem;
+
+	component nis_cpu_uart_spi_0 is
+		port (
+			clk           : in  std_logic                     := 'X';             -- clk
+			reset_n       : in  std_logic                     := 'X';             -- reset_n
+			data_from_cpu : in  std_logic_vector(31 downto 0) := (others => 'X'); -- writedata
+			data_to_cpu   : out std_logic_vector(31 downto 0);                    -- readdata
+			mem_addr      : in  std_logic_vector(2 downto 0)  := (others => 'X'); -- address
+			read_n        : in  std_logic                     := 'X';             -- read_n
+			spi_select    : in  std_logic                     := 'X';             -- chipselect
+			write_n       : in  std_logic                     := 'X';             -- write_n
+			irq           : out std_logic;                                        -- irq
+			MISO          : in  std_logic                     := 'X';             -- export
+			MOSI          : out std_logic;                                        -- export
+			SCLK          : out std_logic;                                        -- export
+			SS_n          : out std_logic                                         -- export
+		);
+	end component nis_cpu_uart_spi_0;
 
 	component nis_cpu_uart_mm_interconnect_0 is
 		port (
@@ -111,13 +133,19 @@ architecture rtl of nis_cpu_uart is
 			jtag_uart_0_avalon_jtag_slave_writedata   : out std_logic_vector(31 downto 0);                    -- writedata
 			jtag_uart_0_avalon_jtag_slave_waitrequest : in  std_logic                     := 'X';             -- waitrequest
 			jtag_uart_0_avalon_jtag_slave_chipselect  : out std_logic;                                        -- chipselect
-			onchip_mem_s1_address                     : out std_logic_vector(12 downto 0);                    -- address
+			onchip_mem_s1_address                     : out std_logic_vector(11 downto 0);                    -- address
 			onchip_mem_s1_write                       : out std_logic;                                        -- write
 			onchip_mem_s1_readdata                    : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
 			onchip_mem_s1_writedata                   : out std_logic_vector(31 downto 0);                    -- writedata
 			onchip_mem_s1_byteenable                  : out std_logic_vector(3 downto 0);                     -- byteenable
 			onchip_mem_s1_chipselect                  : out std_logic;                                        -- chipselect
-			onchip_mem_s1_clken                       : out std_logic                                         -- clken
+			onchip_mem_s1_clken                       : out std_logic;                                        -- clken
+			spi_0_spi_control_port_address            : out std_logic_vector(2 downto 0);                     -- address
+			spi_0_spi_control_port_write              : out std_logic;                                        -- write
+			spi_0_spi_control_port_read               : out std_logic;                                        -- read
+			spi_0_spi_control_port_readdata           : in  std_logic_vector(31 downto 0) := (others => 'X'); -- readdata
+			spi_0_spi_control_port_writedata          : out std_logic_vector(31 downto 0);                    -- writedata
+			spi_0_spi_control_port_chipselect         : out std_logic                                         -- chipselect
 		);
 	end component nis_cpu_uart_mm_interconnect_0;
 
@@ -126,6 +154,7 @@ architecture rtl of nis_cpu_uart is
 			clk           : in  std_logic                     := 'X'; -- clk
 			reset         : in  std_logic                     := 'X'; -- reset
 			receiver0_irq : in  std_logic                     := 'X'; -- irq
+			receiver1_irq : in  std_logic                     := 'X'; -- irq
 			sender_irq    : out std_logic_vector(31 downto 0)         -- irq
 		);
 	end component nis_cpu_uart_irq_mapper;
@@ -227,19 +256,28 @@ architecture rtl of nis_cpu_uart is
 	signal mm_interconnect_0_cpu_debug_mem_slave_writedata                 : std_logic_vector(31 downto 0); -- mm_interconnect_0:cpu_debug_mem_slave_writedata -> cpu:debug_mem_slave_writedata
 	signal mm_interconnect_0_onchip_mem_s1_chipselect                      : std_logic;                     -- mm_interconnect_0:onchip_mem_s1_chipselect -> onchip_mem:chipselect
 	signal mm_interconnect_0_onchip_mem_s1_readdata                        : std_logic_vector(31 downto 0); -- onchip_mem:readdata -> mm_interconnect_0:onchip_mem_s1_readdata
-	signal mm_interconnect_0_onchip_mem_s1_address                         : std_logic_vector(12 downto 0); -- mm_interconnect_0:onchip_mem_s1_address -> onchip_mem:address
+	signal mm_interconnect_0_onchip_mem_s1_address                         : std_logic_vector(11 downto 0); -- mm_interconnect_0:onchip_mem_s1_address -> onchip_mem:address
 	signal mm_interconnect_0_onchip_mem_s1_byteenable                      : std_logic_vector(3 downto 0);  -- mm_interconnect_0:onchip_mem_s1_byteenable -> onchip_mem:byteenable
 	signal mm_interconnect_0_onchip_mem_s1_write                           : std_logic;                     -- mm_interconnect_0:onchip_mem_s1_write -> onchip_mem:write
 	signal mm_interconnect_0_onchip_mem_s1_writedata                       : std_logic_vector(31 downto 0); -- mm_interconnect_0:onchip_mem_s1_writedata -> onchip_mem:writedata
 	signal mm_interconnect_0_onchip_mem_s1_clken                           : std_logic;                     -- mm_interconnect_0:onchip_mem_s1_clken -> onchip_mem:clken
+	signal mm_interconnect_0_spi_0_spi_control_port_chipselect             : std_logic;                     -- mm_interconnect_0:spi_0_spi_control_port_chipselect -> spi_0:spi_select
+	signal mm_interconnect_0_spi_0_spi_control_port_readdata               : std_logic_vector(31 downto 0); -- spi_0:data_to_cpu -> mm_interconnect_0:spi_0_spi_control_port_readdata
+	signal mm_interconnect_0_spi_0_spi_control_port_address                : std_logic_vector(2 downto 0);  -- mm_interconnect_0:spi_0_spi_control_port_address -> spi_0:mem_addr
+	signal mm_interconnect_0_spi_0_spi_control_port_read                   : std_logic;                     -- mm_interconnect_0:spi_0_spi_control_port_read -> mm_interconnect_0_spi_0_spi_control_port_read:in
+	signal mm_interconnect_0_spi_0_spi_control_port_write                  : std_logic;                     -- mm_interconnect_0:spi_0_spi_control_port_write -> mm_interconnect_0_spi_0_spi_control_port_write:in
+	signal mm_interconnect_0_spi_0_spi_control_port_writedata              : std_logic_vector(31 downto 0); -- mm_interconnect_0:spi_0_spi_control_port_writedata -> spi_0:data_from_cpu
 	signal irq_mapper_receiver0_irq                                        : std_logic;                     -- jtag_uart_0:av_irq -> irq_mapper:receiver0_irq
+	signal irq_mapper_receiver1_irq                                        : std_logic;                     -- spi_0:irq -> irq_mapper:receiver1_irq
 	signal cpu_irq_irq                                                     : std_logic_vector(31 downto 0); -- irq_mapper:sender_irq -> cpu:irq
 	signal rst_controller_reset_out_reset                                  : std_logic;                     -- rst_controller:reset_out -> [irq_mapper:reset, mm_interconnect_0:cpu_reset_reset_bridge_in_reset_reset, onchip_mem:reset, rst_controller_reset_out_reset:in, rst_translator:in_reset]
 	signal rst_controller_reset_out_reset_req                              : std_logic;                     -- rst_controller:reset_req -> [cpu:reset_req, onchip_mem:reset_req, rst_translator:reset_req_in]
 	signal reset_reset_n_ports_inv                                         : std_logic;                     -- reset_reset_n:inv -> rst_controller:reset_in0
 	signal mm_interconnect_0_jtag_uart_0_avalon_jtag_slave_read_ports_inv  : std_logic;                     -- mm_interconnect_0_jtag_uart_0_avalon_jtag_slave_read:inv -> jtag_uart_0:av_read_n
 	signal mm_interconnect_0_jtag_uart_0_avalon_jtag_slave_write_ports_inv : std_logic;                     -- mm_interconnect_0_jtag_uart_0_avalon_jtag_slave_write:inv -> jtag_uart_0:av_write_n
-	signal rst_controller_reset_out_reset_ports_inv                        : std_logic;                     -- rst_controller_reset_out_reset:inv -> [cpu:reset_n, jtag_uart_0:rst_n]
+	signal mm_interconnect_0_spi_0_spi_control_port_read_ports_inv         : std_logic;                     -- mm_interconnect_0_spi_0_spi_control_port_read:inv -> spi_0:read_n
+	signal mm_interconnect_0_spi_0_spi_control_port_write_ports_inv        : std_logic;                     -- mm_interconnect_0_spi_0_spi_control_port_write:inv -> spi_0:write_n
+	signal rst_controller_reset_out_reset_ports_inv                        : std_logic;                     -- rst_controller_reset_out_reset:inv -> [cpu:reset_n, jtag_uart_0:rst_n, spi_0:reset_n]
 
 begin
 
@@ -304,6 +342,23 @@ begin
 			freeze     => '0'                                         -- (terminated)
 		);
 
+	spi_0 : component nis_cpu_uart_spi_0
+		port map (
+			clk           => clk_clk,                                                  --              clk.clk
+			reset_n       => rst_controller_reset_out_reset_ports_inv,                 --            reset.reset_n
+			data_from_cpu => mm_interconnect_0_spi_0_spi_control_port_writedata,       -- spi_control_port.writedata
+			data_to_cpu   => mm_interconnect_0_spi_0_spi_control_port_readdata,        --                 .readdata
+			mem_addr      => mm_interconnect_0_spi_0_spi_control_port_address,         --                 .address
+			read_n        => mm_interconnect_0_spi_0_spi_control_port_read_ports_inv,  --                 .read_n
+			spi_select    => mm_interconnect_0_spi_0_spi_control_port_chipselect,      --                 .chipselect
+			write_n       => mm_interconnect_0_spi_0_spi_control_port_write_ports_inv, --                 .write_n
+			irq           => irq_mapper_receiver1_irq,                                 --              irq.irq
+			MISO          => spi_out_MISO,                                             --         external.export
+			MOSI          => spi_out_MOSI,                                             --                 .export
+			SCLK          => spi_out_SCLK,                                             --                 .export
+			SS_n          => spi_out_SS_n                                              --                 .export
+		);
+
 	mm_interconnect_0 : component nis_cpu_uart_mm_interconnect_0
 		port map (
 			clk_clk_clk                               => clk_clk,                                                     --                         clk_clk.clk
@@ -343,7 +398,13 @@ begin
 			onchip_mem_s1_writedata                   => mm_interconnect_0_onchip_mem_s1_writedata,                   --                                .writedata
 			onchip_mem_s1_byteenable                  => mm_interconnect_0_onchip_mem_s1_byteenable,                  --                                .byteenable
 			onchip_mem_s1_chipselect                  => mm_interconnect_0_onchip_mem_s1_chipselect,                  --                                .chipselect
-			onchip_mem_s1_clken                       => mm_interconnect_0_onchip_mem_s1_clken                        --                                .clken
+			onchip_mem_s1_clken                       => mm_interconnect_0_onchip_mem_s1_clken,                       --                                .clken
+			spi_0_spi_control_port_address            => mm_interconnect_0_spi_0_spi_control_port_address,            --          spi_0_spi_control_port.address
+			spi_0_spi_control_port_write              => mm_interconnect_0_spi_0_spi_control_port_write,              --                                .write
+			spi_0_spi_control_port_read               => mm_interconnect_0_spi_0_spi_control_port_read,               --                                .read
+			spi_0_spi_control_port_readdata           => mm_interconnect_0_spi_0_spi_control_port_readdata,           --                                .readdata
+			spi_0_spi_control_port_writedata          => mm_interconnect_0_spi_0_spi_control_port_writedata,          --                                .writedata
+			spi_0_spi_control_port_chipselect         => mm_interconnect_0_spi_0_spi_control_port_chipselect          --                                .chipselect
 		);
 
 	irq_mapper : component nis_cpu_uart_irq_mapper
@@ -351,6 +412,7 @@ begin
 			clk           => clk_clk,                        --       clk.clk
 			reset         => rst_controller_reset_out_reset, -- clk_reset.reset
 			receiver0_irq => irq_mapper_receiver0_irq,       -- receiver0.irq
+			receiver1_irq => irq_mapper_receiver1_irq,       -- receiver1.irq
 			sender_irq    => cpu_irq_irq                     --    sender.irq
 		);
 
@@ -424,6 +486,10 @@ begin
 	mm_interconnect_0_jtag_uart_0_avalon_jtag_slave_read_ports_inv <= not mm_interconnect_0_jtag_uart_0_avalon_jtag_slave_read;
 
 	mm_interconnect_0_jtag_uart_0_avalon_jtag_slave_write_ports_inv <= not mm_interconnect_0_jtag_uart_0_avalon_jtag_slave_write;
+
+	mm_interconnect_0_spi_0_spi_control_port_read_ports_inv <= not mm_interconnect_0_spi_0_spi_control_port_read;
+
+	mm_interconnect_0_spi_0_spi_control_port_write_ports_inv <= not mm_interconnect_0_spi_0_spi_control_port_write;
 
 	rst_controller_reset_out_reset_ports_inv <= not rst_controller_reset_out_reset;
 

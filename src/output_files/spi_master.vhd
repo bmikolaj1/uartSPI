@@ -1,5 +1,3 @@
-
-
 library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
@@ -21,7 +19,6 @@ end spi_master;
 architecture Behavioral of spi_master is
     type state_type is (idle, txBit, CheckFinished);
     signal state : state_type;
-	 signal DataOut : std_logic_vector(3 downto 0);
 
 begin
   process(clk, reset)
@@ -44,19 +41,19 @@ begin
       if(clk'event and clk = '1') then
         case state is
           when idle =>
-            SCLK <= '0';
+              SCLK <= '0';
               state <= txBit;
               SS <= '0';
             
 
           when txBit =>
-            MOSI <= DataToTx(index);
+            MOSI <= DataToTx(index); --transmit recieved data via MOSI line
             SCLK <= '0';
             state <= checkFinished;
             
           when checkFinished =>
 			   
-            DataRxd(index) <= MISO;
+            DataRxd(index) <= MISO;  --copy data from slave to master output DataRxd
 				
             if(index = dataLen) then
               state <= idle;

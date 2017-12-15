@@ -48,3 +48,6 @@ src/incremental_db/README
 *.hex
 *.qip
 *.qsys
+*.qtl
+*.qpg
+*.qdb

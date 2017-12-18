@@ -19,8 +19,8 @@ architecture SIM of spi_slave_tb is
     signal spi_miso       : std_logic;
     
 	 
-	 signal data_txd      : std_logic_vector(31 downto 0);
-    signal data_rxd      : std_logic_vector(31 downto 0);
+	 signal data_txd      : std_logic_vector(23 downto 0);
+    signal data_rxd      : std_logic_vector(23 downto 0);
    
 	 signal sclk_latched : std_logic;
 	 signal sclk_old : std_logic;
@@ -56,19 +56,224 @@ begin
 		  spi_clk <= '0';       
 	     spi_ss <= '1';         
 		  spi_mosi <= '0';     
-		  spi_miso  <= '0';     
+		   
 	     RST <= '1';
         data_txd <= (others => '0');
 		  
-		  wait for 10 ns;
-		  
-        RST <= '0';
+		  wait until rising_edge(CLK);
+		  RST <= '0';
         spi_clk <= '1';       
 	     spi_ss <= '0';         
-		  spi_mosi <= '1';     
-		  spi_miso  <= '0';
+		  spi_mosi <= '0';      
+		  data_txd <= "000000000000000000000001";
+		  
+		  wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+        wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
 
-        data_txd <= X"00000001";
+ wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+ wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+ wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+ wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+ wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '1'; 		  
+		  
+		  wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '1'; 
+		  
+		 
          
         
 

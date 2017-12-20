@@ -21,10 +21,7 @@ architecture Behavioral of spi_slave is
 
     type state_type is (init,txBit);
     signal state : state_type;
-	 
-    signal SCLK_latched, SCLK_old : std_logic;
-    signal SS_latched, SS_old : std_logic;
-    signal MOSI_latched: std_logic;
+	  
     signal TxData : std_logic_vector(23 downto 0);
     signal index: natural range 0 to 23;
     signal RxdData : std_logic_vector(23 downto 0);
@@ -44,20 +41,17 @@ architecture Behavioral of spi_slave is
 
 begin
 
-
-  process(CLK_in, RESET_in)
+  
+	 
+	 
+  process(CLK_in,SPI_CLK,RESET_in)
 
  begin
     if (RESET_in = '1') then
       RxdData <= (others => '0');
       index <= 23;
       TxData  <= (others => '0');
-      SCLK_old <= '0';
-      SCLK_latched <= '0';
-      SS_old <= '0';
-      SS_latched <= '0';
-      MOSI_latched <= '0';
-		Address <= (others => '0');
+		Address <= (others => '1');
 	   ReadWriteBit <= '0';
 	   ControlReg <= (others => '0');
 		StatusReg <= (others => '0');
@@ -69,42 +63,47 @@ begin
 	  case state IS 
 	    
 		 when init =>
-
-      SCLK_latched <= SPI_CLK;
-      SCLK_old <= SCLK_latched;
-      SS_latched <= SPI_SS;
-      SS_old <= SS_latched;
-      MOSI_latched <= SPI_MOSI;
-		TxData <= DataTxd;
+          
+		RxdData <= (others => '0');
+      TxData  <= (others => '0');
+		Address <= (others => '1');
+	   ReadWriteBit <= '0';
+	   ControlReg <= (others => '0');
+		StatusReg <= (others => '0');
+		OnTimeReg <= (others => '0');
+		OffTimeReg <= (others => '0');
+      TxData <= DataTxd; 
 		
 		  state <= txBit;
 		  
 		  when txBit =>
-		  	
+		  
 		
-      if( SS_latched = '0' ) then --slave select low
-		  if(SCLK_old = '0' and SCLK_latched = '1') then --rising edge of spi clock
-		     Address <= Address(5 downto 0) & MOSI_latched; --copy adress from master to adress register
+		 	
+		
+      if( SPI_SS = '0' ) then --slave select low
+		  if(falling_edge(SPI_CLK)) then --rising edge of spi clock
+		     Address <= Address(5 downto 0) & SPI_MOSI; --copy adress from master to adress register
 			  
 	
 		
            if(index = 16) then 
 			     
-			     ReadWriteBit <= MOSI_latched; -- copy read or write bit to ReadWriteBit register
+			     ReadWriteBit <= SPI_MOSI; -- copy read or write bit to ReadWriteBit register
 				  
 			  if(index = 15 and ReadWriteBit = '1') then --if write operation
 			     case Address is
 				   when controlAddr => 
-                 ControlReg <= ControlReg(14 downto 0) & MOSI_latched; -- copy value from master to rxdData
+                 ControlReg <= ControlReg(14 downto 0) & SPI_MOSI; -- copy value from master to rxdData
 					  
 					 when statusAddr => 
-                 StatusReg <= StatusReg(14 downto 0) & MOSI_latched; -- copy value from master to rxdData
+                 StatusReg <= StatusReg(14 downto 0) & SPI_MOSI; -- copy value from master to rxdData
 					  
 					 when onTimeAddr => 
-                 OnTimeReg <= OnTimeReg(14 downto 0) & MOSI_latched; -- copy value from master to rxdData
+                 OnTimeReg <= OnTimeReg(14 downto 0) & SPI_MOSI; -- copy value from master to rxdData
 					  
 					 when ofTimeAddr => 
-                 OffTimeReg <= OffTimeReg(14 downto 0) & MOSI_latched; -- copy value from master to rxdData
+                 OffTimeReg <= OffTimeReg(14 downto 0) & SPI_MOSI; -- copy value from master to rxdData
 					  
 					 when others =>
 					   ControlReg <= (others => '0');
@@ -116,7 +115,7 @@ begin
 			    end if;
 				  end if;
 			  	
-         elsif(SCLK_old = '1' and SCLK_latched = '0') then  --faling edge of spic clock
+         elsif(rising_edge(SPI_CLK)) then  --faling edge of spic clock
 			  
               TxData <= TxData(22 downto 0) & TxData(23); -- output data from led to master
 				

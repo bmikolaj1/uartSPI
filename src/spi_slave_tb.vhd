@@ -22,14 +22,11 @@ architecture SIM of spi_slave_tb is
 	 signal data_txd      : std_logic_vector(23 downto 0);
     signal data_rxd      : std_logic_vector(23 downto 0);
    
-	 signal sclk_latched : std_logic;
-	 signal sclk_old : std_logic;
-    signal ss_latched, ss_old : std_logic;
 	 
 
 begin
 
- spi_slave : entity work.SPI_SLAVE
+ spi_slave : entity work.spi_slave
     port map (
         CLK_in       => CLK,
         RESET_in     => RST,       
@@ -40,6 +37,10 @@ begin
         DataTxd      => data_txd,
         DataRxd  		=> data_rxd	  
     );
+	 
+	
+		
+
     
     clk_process : process
     begin
@@ -59,6 +60,8 @@ begin
 		   
 	     RST <= '1';
         data_txd <= (others => '0');
+		  
+		  wait for 20 ns;
 		  
 		  wait until rising_edge(CLK);
 		  RST <= '0';
@@ -277,7 +280,6 @@ begin
          
         
 
-        wait;
     end process;
 	 
 	 

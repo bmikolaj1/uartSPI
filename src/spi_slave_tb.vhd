@@ -52,6 +52,7 @@ begin
 	 
 	 
 	 slave_test_process : process
+	 
     begin
 	 
 		  spi_clk <= '0';       
@@ -71,12 +72,11 @@ begin
 		  data_txd <= "000000000000000000000001";
 		  
 		  wait until falling_edge(CLK); 
-        spi_clk <= '0';       
-	     spi_ss <= '0';         
+        spi_clk <= '1';       
+	             
 		  
 		  wait until rising_edge(CLK);
-        spi_clk <= '1';       
-	     spi_ss <= '0';         
+        spi_clk <= '0';               
 		  spi_mosi <= '0'; 
 		  
         wait until falling_edge(CLK); 
@@ -88,193 +88,463 @@ begin
 	     spi_ss <= '0';         
 		  spi_mosi <= '0'; 
 
- wait until falling_edge(CLK); 
+        wait until falling_edge(CLK); 
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
         spi_clk <= '0';       
 	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+        wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
 		  
 		  wait until rising_edge(CLK);
         spi_clk <= '1';       
 	     spi_ss <= '0';         
 		  spi_mosi <= '0'; 
- wait until falling_edge(CLK); 
+
+        wait until falling_edge(CLK); 
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
         spi_clk <= '0';       
 	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+        wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
 		  
 		  wait until rising_edge(CLK);
         spi_clk <= '1';       
 	     spi_ss <= '0';         
 		  spi_mosi <= '0'; 
+
+        wait until falling_edge(CLK); 
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
 		  
- wait until falling_edge(CLK); 
+		  wait until rising_edge(CLK);
         spi_clk <= '0';       
 	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+        wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
 		  
 		  wait until rising_edge(CLK);
         spi_clk <= '1';       
 	     spi_ss <= '0';         
 		  spi_mosi <= '0'; 
+
+        wait until falling_edge(CLK); 
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
 		  
- wait until falling_edge(CLK); 
+		  wait until rising_edge(CLK);
         spi_clk <= '0';       
 	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+        wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
 		  
 		  wait until rising_edge(CLK);
         spi_clk <= '1';       
 	     spi_ss <= '0';         
 		  spi_mosi <= '0'; 
-		  
- wait until falling_edge(CLK); 
-        spi_clk <= '0';       
-	     spi_ss <= '0';         
-		  
-		  wait until rising_edge(CLK);
+
+        wait until falling_edge(CLK); 
         spi_clk <= '1';       
 	     spi_ss <= '0';         
-		  spi_mosi <= '1'; 		  
+		  spi_mosi <= '0'; 
 		  
-		  wait until falling_edge(CLK); 
+		  wait until rising_edge(CLK);
         spi_clk <= '0';       
 	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+        wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
 		  
 		  wait until rising_edge(CLK);
         spi_clk <= '1';       
 	     spi_ss <= '0';         
 		  spi_mosi <= '0'; 
-		  
-		  wait until falling_edge(CLK); 
-        spi_clk <= '0';       
-	     spi_ss <= '0';         
-		  
-		  wait until rising_edge(CLK);
+
+        wait until falling_edge(CLK); 
         spi_clk <= '1';       
 	     spi_ss <= '0';         
 		  spi_mosi <= '0'; 
 		  
-		  wait until falling_edge(CLK); 
-        spi_clk <= '0';       
-	     spi_ss <= '0';         
-		  
 		  wait until rising_edge(CLK);
-        spi_clk <= '1';       
+        spi_clk <= '0';       
 	     spi_ss <= '0';         
 		  spi_mosi <= '0'; 
 		  
-		  wait until falling_edge(CLK); 
+        wait until falling_edge(CLK); 
         spi_clk <= '0';       
-	     spi_ss <= '0';         
-		  
-		  wait until rising_edge(CLK);
-        spi_clk <= '1';       
 	     spi_ss <= '0';         
 		  spi_mosi <= '0'; 
-		  
-		  wait until falling_edge(CLK); 
-        spi_clk <= '0';       
-	     spi_ss <= '0';         
-		  
-		  wait until rising_edge(CLK);
-        spi_clk <= '1';       
-	     spi_ss <= '0';         
-		  spi_mosi <= '0'; 
-		  
-		  wait until falling_edge(CLK); 
-        spi_clk <= '0';       
-	     spi_ss <= '0';         
-		  
-		  wait until rising_edge(CLK);
-        spi_clk <= '1';       
-	     spi_ss <= '0';         
-		  spi_mosi <= '0'; 
-		  
-		  wait until falling_edge(CLK); 
-        spi_clk <= '0';       
-	     spi_ss <= '0';         
-		  
-		  wait until rising_edge(CLK);
-        spi_clk <= '1';       
-	     spi_ss <= '0';         
-		  spi_mosi <= '0'; 
-		  
-		  wait until falling_edge(CLK); 
-        spi_clk <= '0';       
-	     spi_ss <= '0';         
-		  
-		  wait until rising_edge(CLK);
-        spi_clk <= '1';       
-	     spi_ss <= '0';         
-		  spi_mosi <= '0'; 
-		  
-		  wait until falling_edge(CLK); 
-        spi_clk <= '0';       
-	     spi_ss <= '0';         
-		  
-		  wait until rising_edge(CLK);
-        spi_clk <= '1';       
-	     spi_ss <= '0';         
-		  spi_mosi <= '0'; 
-		  
-		  wait until falling_edge(CLK); 
-        spi_clk <= '0';       
-	     spi_ss <= '0';         
-		  
-		  wait until rising_edge(CLK);
-        spi_clk <= '1';       
-	     spi_ss <= '0';         
-		  spi_mosi <= '0'; 
-		  
-		  wait until falling_edge(CLK); 
-        spi_clk <= '0';       
-	     spi_ss <= '0';         
-		  
-		  wait until rising_edge(CLK);
-        spi_clk <= '1';       
-	     spi_ss <= '0';         
-		  spi_mosi <= '0'; 
-		  
-		  wait until falling_edge(CLK); 
-        spi_clk <= '0';       
-	     spi_ss <= '0';         
-		  
-		  wait until rising_edge(CLK);
-        spi_clk <= '1';       
-	     spi_ss <= '0';         
-		  spi_mosi <= '0'; 
-		  
-		  wait until falling_edge(CLK); 
-        spi_clk <= '0';       
-	     spi_ss <= '0';         
-		  
-		  wait until rising_edge(CLK);
-        spi_clk <= '1';       
-	     spi_ss <= '0';         
-		  spi_mosi <= '0'; 
-		  
-		  wait until falling_edge(CLK); 
-        spi_clk <= '0';       
-	     spi_ss <= '0';         
-		  
-		  wait until rising_edge(CLK);
-        spi_clk <= '1';       
-	     spi_ss <= '0';         
-		  spi_mosi <= '0'; 
-		  
-		  wait until falling_edge(CLK); 
-        spi_clk <= '0';       
-	     spi_ss <= '0';         
-		  
-		  wait until rising_edge(CLK);
-        spi_clk <= '1';       
-	     spi_ss <= '0';         
-		  spi_mosi <= '0'; 
-		  
-		  wait until falling_edge(CLK); 
-        spi_clk <= '0';       
-	     spi_ss <= '0';         
 		  
 		  wait until rising_edge(CLK);
         spi_clk <= '1';       
 	     spi_ss <= '0';         
 		  spi_mosi <= '1'; 
+
+        wait until falling_edge(CLK); 
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '1'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+        wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+
+        wait until falling_edge(CLK); 
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+        wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+
+        wait until falling_edge(CLK); 
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+        wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+
+        wait until falling_edge(CLK); 
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+        wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+
+        wait until falling_edge(CLK); 
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+        wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+
+        wait until falling_edge(CLK); 
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+        wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+
+        wait until falling_edge(CLK); 
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+        wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+
+        wait until falling_edge(CLK); 
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+        wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+
+        wait until falling_edge(CLK); 
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+        wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+
+        wait until falling_edge(CLK); 
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+        wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+
+        wait until falling_edge(CLK); 
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+        wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+
+        wait until falling_edge(CLK); 
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+        wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+
+        wait until falling_edge(CLK); 
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+        wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+
+        wait until falling_edge(CLK); 
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+        wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+
+        wait until falling_edge(CLK); 
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+        wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+
+        wait until falling_edge(CLK); 
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+        wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '1'; 
+
+        wait until falling_edge(CLK); 
+        spi_clk <= '1';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '1'; 
+		  
+		  wait until rising_edge(CLK);
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+        wait until falling_edge(CLK); 
+        spi_clk <= '0';       
+	     spi_ss <= '0';         
+		  spi_mosi <= '0'; 
+		  
+		  
+		  wait for 20 ns;
 		  
 		 
          

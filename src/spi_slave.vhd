@@ -18,9 +18,9 @@ end spi_slave;
 
 architecture Behavioral of spi_slave is
 
-
-    type state_type is (init,txBit);
-    signal state : state_type;
+    signal spi_clk_reg        : std_logic;
+    signal spi_clk_redge_en   : std_logic;
+    signal spi_clk_fedge_en   : std_logic;
 	  
     signal TxData : std_logic_vector(23 downto 0);
     signal index: natural range 0 to 23;
@@ -41,48 +41,50 @@ architecture Behavioral of spi_slave is
 
 begin
 
-  
+  spi_clk_reg_p : process (CLK_in)
+    begin
+        if (rising_edge(CLK_in)) then
+            if (RESET_in = '1') then
+                spi_clk_reg <= '0';
+            else
+                spi_clk_reg <= SPI_CLK;
+            end if;
+        end if;
+    end process;
+
+
+    -- Falling edge is detect when SCLK=0 and spi_clk_reg=1.
+    spi_clk_fedge_en <= not SPI_CLK and spi_clk_reg;
+    -- Rising edge is detect when SCLK=1 and spi_clk_reg=0.
+    spi_clk_redge_en <= SPI_CLK and not spi_clk_reg;
 	 
 	 
-  process(CLK_in,SPI_CLK,RESET_in)
+  spi_transfer : process(CLK_in,RESET_in)
 
  begin
+ 
+ TxData <= DataTxd;  
+ 
     if (RESET_in = '1') then
       RxdData <= (others => '0');
       index <= 23;
       TxData  <= (others => '0');
-		Address <= (others => '1');
+		Address <= (others => '0');
 	   ReadWriteBit <= '0';
 	   ControlReg <= (others => '0');
 		StatusReg <= (others => '0');
 		OnTimeReg <= (others => '0');
 		OffTimeReg <= (others => '0');
+	    
 		
 
     elsif( rising_edge(CLK_in) ) then
-	  case state IS 
-	    
-		 when init =>
-          
-		RxdData <= (others => '0');
-      TxData  <= (others => '0');
-		Address <= (others => '1');
-	   ReadWriteBit <= '0';
-	   ControlReg <= (others => '0');
-		StatusReg <= (others => '0');
-		OnTimeReg <= (others => '0');
-		OffTimeReg <= (others => '0');
-      TxData <= DataTxd; 
+	     
+      
 		
-		  state <= txBit;
-		  
-		  when txBit =>
-		  
-		
-		 	
-		
+	
       if( SPI_SS = '0' ) then --slave select low
-		  if(falling_edge(SPI_CLK)) then --rising edge of spi clock
+		  if(spi_clk_redge_en = '1') then --rising edge of spi clock
 		     Address <= Address(5 downto 0) & SPI_MOSI; --copy adress from master to adress register
 			  
 	
@@ -114,26 +116,27 @@ begin
            
 			    end if;
 				  end if;
-			  	
-         elsif(rising_edge(SPI_CLK)) then  --faling edge of spic clock
-			  
-              TxData <= TxData(22 downto 0) & TxData(23); -- output data from led to master
-				
-        end if;
-		     
-			  if(index = 0) then
+				  
+				if(index = 0) then
 			     index <= 23;
-			     state <= init;
+			    
 				else
 				index <= index-1;
-			   state <= txBit;
-				end if;
+			   end if;
+			  	
+         elsif(spi_clk_fedge_en = '1') then  --faling edge of spi clock
+			  
+              TxData <= TxData(22 downto 0) & TxData(23); -- output data from led to master
+		
+        end if;
+		     
+			  
 				
 		  
 		 
 		  
-		   end if;
-		  end case;
+		   
+		 end if; 
       end if;
    end process;
 
